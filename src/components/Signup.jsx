@@ -1,7 +1,6 @@
-// Signup.js
 import React, { useState } from 'react';
 import axios from 'axios';
-
+import '../styles/SignUp.css'
 function Signup() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -38,20 +37,28 @@ function Signup() {
   };
 
   return (
-    <div>
-      <h2>Signup</h2>
-      {error && <p>{error}</p>}
+    <div className="signup-container">
+      <h2 className="signup-header">Signup</h2>
+      {error && <p className="error-message">{error}</p>}
       <form onSubmit={handleSubmit}>
-        <input type="text" placeholder="Restaurant Name" value={name} onChange={(e) => setName(e.target.value)} />
-        <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
-        <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
-        <input
-          type="password"
-          placeholder="Confirm Password"
-          value={confirmPassword}
-          onChange={(e) => setConfirmPassword(e.target.value)}
-        />
-        <button type="submit">Signup</button>
+        <div className="input-container">
+          <input type="text" placeholder="Restaurant Name" value={name} onChange={(e) => setName(e.target.value)} />
+        </div>
+        <div className="input-container">
+          <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
+        </div>
+        <div className="input-container">
+          <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
+        </div>
+        <div className="input-container">
+          <input
+            type="password"
+            placeholder="Confirm Password"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+          />
+        </div>
+        <button type="submit" className="submit-button">Signup</button>
       </form>
     </div>
   );

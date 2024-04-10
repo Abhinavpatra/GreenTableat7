@@ -1,12 +1,12 @@
 import React, { Suspense } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import LandingPage from './components/LandingPage';
-import RestarauntAuth from './components/RestarauntAuth';
+import RestarauntAuth from './components/RestaurauntAuth';
 import Dashboard from './components/DashboardPage';
 import Login from './components/Login';
 import Signup from './components/Signup';
 import BhookaPage from './components/BhookaPage';
-
+import './App.css'
 
 export default function App() {
   return (

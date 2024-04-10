@@ -1,5 +1,6 @@
 import React from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import '../styles/RestaurauntAuth.css';
 
 export default function RestaurantAuth() {
   const navigate = useNavigate();
@@ -13,13 +14,14 @@ export default function RestaurantAuth() {
   };
 
   return (
-    <div>
-      <h2>Restaurant</h2>
-      <div>
+    <div className="container">
+        <div className="heading">Restaurant</div>
+      <div className="button-container">
         <button onClick={handleLogin}>Login</button>
         <button onClick={handleSignup}>Signup</button>
       </div>
+      
+    
     </div>
   );
 }
-

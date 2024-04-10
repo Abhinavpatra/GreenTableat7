@@ -1,11 +1,11 @@
-// Login.js
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useSetRecoilState } from 'recoil';
 import { restaurantIdState } from './atoms'; // Import Recoil hooks and atom
+import '../styles/Login.css'
 
-function Login() {
+export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -22,7 +22,7 @@ function Login() {
       // Set the restaurant ID in Recoil state
       setRestaurantId(loggedInRestaurantId);
 
-      console.log(response.data)
+      console.log(response.data);
       localStorage.setItem('token', response.data.token);
       navigate('/dashboard');
     } catch (err) {
@@ -31,17 +31,17 @@ function Login() {
   };
 
   return (
-    <div>
-      <h2>Login</h2>
-      {error && <p>{error}</p>}
-      <form onSubmit={handleSubmit}>
-        <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
-        <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
-        <button type="submit">Login</button>
-      </form>
-      <button onClick={() => navigate('/signup')}>Don't have an account? Sign up here.</button>
+    <div className="login-container">
+      <div className="container">
+        <h2>Login</h2>
+        {error && <p className="error">{error}</p>}
+        <form onSubmit={handleSubmit}>
+          <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
+          <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
+          <button type="submit">Login</button>
+        </form>
+        <button className="signup-button" onClick={() => navigate('/signup')}>Don't have an account? Sign up here.</button>
+      </div>
     </div>
   );
 }
-
-export default Login;
