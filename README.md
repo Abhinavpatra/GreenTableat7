@@ -19,17 +19,22 @@ Greentable is a web application built using the MERN (MongoDB, Express.js, React
 2. Install dependencies:
 
 npm i
+after reaching the directory server
+and then: do node app.js
+then change the directory by
+ cd ..
+ npm i
+ 
+ ready.
 
-
-3. Set up environment variables:
+1. Set up environment variables:
 
 Create a `.env` file in the root directory and add the following variables:
 
-PORT=5000
-MONGO_URI=mongodb://localhost:27017/greentable
-SECRET_KEY=your_secret_key
+MONGO_URL = mongodb+srv://shadow_voltrex:s3EMN3Y1amB0Sp2Z@cluster0.c0lg2vx.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
+JWT_SECRET_KEY = shadow_voltrex_22103013
 
-4. Run the application:
+4. Run the application: npm run dev in the main folder outside the src.
 
 
 ## Technologies Used
@@ -37,9 +42,10 @@ SECRET_KEY=your_secret_key
 - **Frontend**: React.js, React Router, Axios
 - **Backend**: Node.js, Express.js, MongoDB, Mongoose
 - **State Management**: Recoil
+- **Hooks**:useEffect,useNavigate,useSetRecoilState,useState
 - **Authentication**: JWT (JSON Web Tokens)
 - **Form Validation**: Zod
-- **Styling**: CSS
+- **Styling**: CSS,css modules
 
 ## Folder Structure
 
