@@ -24,7 +24,7 @@ export default function AdminDashboard() {
       }
 
       // Fetch restaurant data for the elite admin using the restaurantId
-      const response = await axios.get(`/api/restaurants/${loggedInRestaurantId}`);
+      const response = await axios.get(`http://localhost:3000/api/restaurants/${loggedInRestaurantId}`);
       setRestaurants(response.data);
     } catch (err) {
       console.error('Fuck! Error fetching restaurants:', err);

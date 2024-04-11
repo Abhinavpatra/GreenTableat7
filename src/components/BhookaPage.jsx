@@ -7,7 +7,7 @@ export default function BhookaPage() {
   useEffect(() => {
     const fetchRestaurants = async () => {
       try {
-        const response = await axios.get('/api/restaurants');
+        const response = await axios.get('http://localhost:3000/api/restaurants');
         setRestaurants(response.data);
       } catch (err) {
         console.error('Error fetching restaurants:', err);
