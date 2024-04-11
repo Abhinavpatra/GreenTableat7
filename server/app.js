@@ -100,3 +100,21 @@ app.post('/api/login', async (req,res) => {
         return res.status(500).json({ error: 'Internal server error' });
     }    
 })
+
+app.get('/api/restaurants/:restaurantId', async (req,res) => {
+    let {restaurantId} = req.params;
+    if (!restaurantId) {
+        return res.status(400).json({ error: 'Missing required fields' });
+    }
+
+    try {
+        const user = await User.findOne({restaurantId});
+        if(!user){
+            return res.status(409).json({error: 'User Not Exist , SignUp First!!'});
+        }
+        res.status(200).json({user});
+    }catch(err){
+        console.error('Error handling update request:', err);
+        return res.status(500).json({ error: 'Internal server error' });
+    }
+})
