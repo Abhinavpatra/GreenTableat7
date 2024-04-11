@@ -112,9 +112,19 @@ app.get('/api/restaurants/:restaurantId', async (req,res) => {
         if(!user){
             return res.status(409).json({error: 'User Not Exist , SignUp First!!'});
         }
-        res.status(200).json({user});
+        return res.status(200).json({user});
     }catch(err){
         console.error('Error handling update request:', err);
+        return res.status(500).json({ error: 'Internal server error' });
+    }
+})
+
+app.get('/api/restaurants', async (req,res) => {
+    try {
+        const users = await User.find({});
+        return res.status(200).json({users});
+    } catch (err) {
+        console.error('Error handling database request:', err);
         return res.status(500).json({ error: 'Internal server error' });
     }
 })
