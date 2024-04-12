@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../styles/LandingPage.modules.css'; // Import CSS module without treating it as a module
-import '../styles/Sp'
+// import '../styles/Sp'
 
 export default function LandingPage() {
   const navigate = useNavigate();

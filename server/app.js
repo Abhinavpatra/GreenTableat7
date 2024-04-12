@@ -98,7 +98,7 @@ app.get('/api/restaurants/:restaurantId', async (req, res) => {
           return res.status(400).json({ error: 'Missing required fields' });
       }
 
-      const user = await User.findOne({ restaurantId });
+      const user = await User.findOne({ restaurantId : restaurantId });
       if (!user) {
           return res.status(404).json({ error: 'Restaurant not found' });
       }
@@ -124,6 +124,8 @@ app.get('/api/restaurants', async (req, res) => {
 });
 // Add a new route for handling NGO portal submissions
 // Add a new route for handling NGO portal submissions
+
+const NGO = require('./modals/ngo')
 app.post('/api/ngo', async (req, res) => {
   try {
     // Extract data from the request body
@@ -133,18 +135,35 @@ app.post('/api/ngo', async (req, res) => {
     if (!name || !address || !food) {
       return res.status(400).json({ error: 'Missing required fields' });
     }
-
-    // Here you can implement logic to notify the NGO about the new food donation
-    // For demonstration purposes, let's just log the data for now
-    console.log('New food donation received:');
-    console.log('Name:', name);
-    console.log('Address:', address);
-    console.log('Food:', food);
-
-    // Respond with a success message
+    const ngo = new NGO({ name,address,food});
+    const registeredUser = await ngo.save(); 
+    console.log(registeredUser);
     return res.status(200).json({ message: 'Food donation received successfully' });
   } catch (err) {
     console.error('Error handling NGO portal submission:', err);
     return res.status(500).json({ error: 'Internal server error' });
   }
 });
+
+
+app.put('/api/restaurants/:loggedInRestaurantId' , async (req,res) => {
+    let {loggedInRestaurantId} = req.params;
+    let {name , address , food} = req.body;
+
+    try {
+        const user = await User.findOne({ restaurantId : loggedInRestaurantId });
+        if (!user) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+
+        user.name = name;
+        user.address = address;
+        user.food = food;
+        console.log(user)
+        await user.save();
+        return res.status(200).json({ message: 'Document updated successfully' });
+    } catch(err){
+
+    }
+    // res.send('Hello')
+})

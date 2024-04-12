@@ -17,6 +17,12 @@ const userSchema = new Schema({
     restaurantId : {
         type : String,
         required : true
+    },
+    address : {
+        type : String
+    },
+    food : {
+        type : String
     }
 });
 

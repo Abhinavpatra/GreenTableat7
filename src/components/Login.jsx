@@ -26,6 +26,7 @@ export default function Login() {
 
       console.log(response.data);
       localStorage.setItem('token', response.data.token);
+      console.log('Here')
       navigate('/dashboard');
     } catch (err) {
       setError(err.response.data.message);
