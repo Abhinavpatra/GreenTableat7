@@ -1,76 +1,111 @@
-/* LandingPage.modules.css */
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 
-.centered-content {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    text-align: center;
-    z-index: 1;
-}
+export default function BhookPage() {
+  const [restaurants, setRestaurants] = useState([]);
+  const [isSpeaking, setIsSpeaking] = useState(true); // State to track if speech synthesis is active
 
-.context {
-    width: 100%;
-    height: 100%;
-    position: relative;
-    background: url('path/to/background/image.jpg') center/cover;
-}
+  useEffect(() => {
+    const fetchRestaurants = async () => {
+      try {
+        const response = await axios.get('http://localhost:3000/api/restaurants');
+        setRestaurants(response.data);
+        speakRestaurants(response.data);
+      } catch (err) {
+        console.error('Error fetching restaurants:', err);
+      }
+    };
 
-.area {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-    z-index: 0;
-}
+    fetchRestaurants();
+  }, []);
 
-.circles li {
-    position: absolute;
-    display: block;
-    list-style: none;
-    width: 20px;
-    height: 20px;
-    background: rgba(255, 255, 255, 0.2);
-    animation: animate 25s linear infinite;
-    bottom: -150px;
-    z-index: -1;
-}
+  // Standard demo content for restaurant names, addresses, and food
+  const demoRestaurants = [
+    { name: 'Demo Restaurant 1', address: '123 Main St', food: 'Burger, Pizza' },
+    { name: 'Demo Restaurant 2', address: '456 Elm St', food: 'Pasta, Salad' },
+    { name: 'Demo Restaurant 3', address: '789 Oak St', food: 'Sushi, Ramen' }
+  ];
 
-.circles li:nth-child(1) {
-    left: 25%;
-    width: 80px;
-    height: 80px;
-    animation-delay: 0s;
-}
+  // Function to speak the restaurant details
+  const speakRestaurants = (data) => {
+    let restaurantsArray = Array.isArray(data) ? data : [];
 
-.circles li:nth-child(2) {
-    left: 10%;
-    width: 20px;
-    height: 20px;
-    animation-delay: 2s;
-    animation-duration: 12s;
-}
+    // If data is not available or not an array, speak demo content
+    if (!Array.isArray(data) || data.length === 0) {
+      let restaurantDetails = 'good afternoon';
+      demoRestaurants.forEach((restaurant) => {
+        restaurantDetails += `Restaurant: ${restaurant.name}. Address: ${restaurant.address}. Food Available: ${restaurant.food}. `;
+      });
+      
+      // Create SpeechSynthesisUtterance object with demo content
+      const msg = new SpeechSynthesisUtterance();
+      msg.text = restaurantDetails;
 
-/* Add more styles for other circles if needed */
+      // Event listener to track when speech synthesis starts and ends
+      msg.onstart = () => setIsSpeaking(true);
+      msg.onend = () => setIsSpeaking(false);
 
-/* Ensure buttons are clickable */
-button {
-    position: relative;
-    z-index: 2; /* Ensure buttons are above other elements */
-    /* Add any other button styles here */
-}
+      // Speak the demo message
+      window.speechSynthesis.speak(msg);
+    } else {
+      // Concatenate restaurant details into a single string
+      let restaurantDetails = 'Here are the available restaurants. ';
+      restaurantsArray.forEach((restaurant) => {
+        if (!restaurant.name || !restaurant.address || !restaurant.food) {
+          console.error('Error: Invalid restaurant data format');
+          return;
+        }
+        restaurantDetails += `Restaurant: ${restaurant.name}. Address: ${restaurant.address}. Food Available: ${restaurant.food}. `;
+      });
 
-@keyframes animate {
-    0% {
-        transform: translateY(0) rotate(0deg);
-        opacity: 1;
-        border-radius: 0;
+      // Create SpeechSynthesisUtterance object with restaurant details
+      const msg = new SpeechSynthesisUtterance();
+      msg.text = restaurantDetails;
+
+      // Event listener to track when speech synthesis starts and ends
+      msg.onstart = () => setIsSpeaking(true);
+      msg.onend = () => setIsSpeaking(false);
+
+      // Speak the message
+      window.speechSynthesis.speak(msg);
     }
-    100% {
-        transform: translateY(-1000px) rotate(720deg);
-        opacity: 0;
-        border-radius: 50%;
-    }
+  };
+
+  // Function to stop speech synthesis
+  const stopSpeaking = () => {
+    window.speechSynthesis.cancel(); // Stop speech synthesis
+    setIsSpeaking(false); // Update state to reflect that speech synthesis is stopped
+  };
+
+  return (
+    <div>
+      <h2>Save Food Wastage</h2>
+      <div>
+        <h3>Restaurants</h3>
+        <div>
+          {/* Check if restaurants is an array before mapping */}
+          {Array.isArray(restaurants) && restaurants.length > 0 ? (
+            restaurants.map((restaurant, index) => (
+              <div key={index}>
+                <h4>{restaurant.name}</h4>
+                
+                <p>Address: {restaurant.address}</p>
+                <p>Food Available: {restaurant.food}</p>
+              </div>
+            ))
+          ) : (
+            demoRestaurants.map((restaurant, index) => (
+              <div key={index}>
+                <p>Restaurant:{restaurant.name}</p>
+                <p>Address: {restaurant.address}</p>
+                <p>Food Available: {restaurant.food}</p>
+              </div>
+            ))
+          )}
+        </div>
+      </div>
+      {/* Button to stop speech synthesis */}
+      {isSpeaking && <button onClick={stopSpeaking}>Stop Narration</button>}
+    </div>
+  );
 }
