@@ -8,7 +8,8 @@ export default function BhookaPage() {
     const fetchRestaurants = async () => {
       try {
         const response = await axios.get('http://localhost:3000/api/restaurants');
-        setRestaurants(response.data);
+        console.log(response.data.users)
+        setRestaurants(response.data.users);
       } catch (err) {
         console.error('Error fetching restaurants:', err);
       }
@@ -31,7 +32,8 @@ export default function BhookaPage() {
         <h3>Restaurants</h3>
         <div>
           {/* Check if restaurants is an array before mapping */}
-          {Array.isArray(restaurants) && restaurants.length > 0 ? (
+          {Array.isArray(restaurants) && restaurants.length > 0 ? 
+          (
             restaurants.map((restaurant, index) => (
               <div key={index}>
                 <h4>{restaurant.name}</h4>

@@ -14,11 +14,11 @@ export default function AdminDashboard() {
   const fetchRestaurants = async () => {
     setIsLoading(true);
     try {
-      const response = await fetch(`/api/restaurants/${loggedInRestaurantId}`);
+      const response = await fetch(`http://localhost:3000/api/restaurants/${loggedInRestaurantId}`);
       if (response.ok) {
         const data = await response.json();
         if (data && Object.keys(data).length !== 0) {
-          setEditedRestaurant(data.restaurant);
+          setEditedRestaurant(data.user);
         }
       } else {
         console.error('Error fetching restaurant data:', response.statusText);
@@ -56,7 +56,7 @@ export default function AdminDashboard() {
         return;
       }
   
-      const response = await fetch(`/api/restaurants/${loggedInRestaurantId}`, {
+      const response = await fetch(`http://localhost:3000/api/restaurants/${loggedInRestaurantId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json'
@@ -69,6 +69,7 @@ export default function AdminDashboard() {
       }
   
       fetchRestaurants();
+      alert('Data Saved Successfully')
     } catch (err) {
       console.error('Error updating restaurant data:', err);
     }
