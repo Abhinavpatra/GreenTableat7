@@ -3,6 +3,7 @@ import axios from 'axios';
 
 export default function BhookPage() {
   const [restaurants, setRestaurants] = useState([]);
+  const [isSpeaking, setIsSpeaking] = useState(true); // State to track if speech synthesis is active
 
   useEffect(() => {
     const fetchRestaurants = async () => {
@@ -27,12 +28,53 @@ export default function BhookPage() {
 
   // Function to speak the restaurant details
   const speakRestaurants = (data) => {
-    const msg = new SpeechSynthesisUtterance();
-    msg.text = `Here are the available restaurants. `;
-    data.forEach((restaurant) => {
-      msg.text += `Restaurant: ${restaurant.name}. Address: ${restaurant.address}. Food Available: ${restaurant.food}. `;
-    });
-    window.speechSynthesis.speak(msg);
+    let restaurantsArray = Array.isArray(data) ? data : [];
+
+    // If data is not available or not an array, speak demo content
+    if (!Array.isArray(data) || data.length === 0) {
+      let restaurantDetails = 'good afternoon';
+      demoRestaurants.forEach((restaurant) => {
+        restaurantDetails += `Restaurant: ${restaurant.name}. Address: ${restaurant.address}. Food Available: ${restaurant.food}. `;
+      });
+      
+      // Create SpeechSynthesisUtterance object with demo content
+      const msg = new SpeechSynthesisUtterance();
+      msg.text = restaurantDetails;
+
+      // Event listener to track when speech synthesis starts and ends
+      msg.onstart = () => setIsSpeaking(true);
+      msg.onend = () => setIsSpeaking(false);
+
+      // Speak the demo message
+      window.speechSynthesis.speak(msg);
+    } else {
+      // Concatenate restaurant details into a single string
+      let restaurantDetails = 'Here are the available restaurants. ';
+      restaurantsArray.forEach((restaurant) => {
+        if (!restaurant.name || !restaurant.address || !restaurant.food) {
+          console.error('Error: Invalid restaurant data format');
+          return;
+        }
+        restaurantDetails += `Restaurant: ${restaurant.name}. Address: ${restaurant.address}. Food Available: ${restaurant.food}. `;
+      });
+
+      // Create SpeechSynthesisUtterance object with restaurant details
+      const msg = new SpeechSynthesisUtterance();
+      msg.text = restaurantDetails;
+
+      // Event listener to track when speech synthesis starts and ends
+      msg.onstart = () => setIsSpeaking(true);
+      msg.onend = () => setIsSpeaking(false);
+
+      // Speak the message
+      window.speechSynthesis.speak(msg);
+    }
+  };
+
+  // Function to stop speech synthesis
+  const stopSpeaking = () => {
+    window.speechSynthesis.cancel(); // Stop speech synthesis
+    setIsSpeaking(false); // Update state to reflect that speech synthesis is stopped
   };
 
   return (
@@ -46,6 +88,7 @@ export default function BhookPage() {
             restaurants.map((restaurant, index) => (
               <div key={index}>
                 <h4>{restaurant.name}</h4>
+                
                 <p>Address: {restaurant.address}</p>
                 <p>Food Available: {restaurant.food}</p>
               </div>
@@ -53,7 +96,7 @@ export default function BhookPage() {
           ) : (
             demoRestaurants.map((restaurant, index) => (
               <div key={index}>
-                <h4>{restaurant.name}</h4>
+                <p>Restaurant:{restaurant.name}</p>
                 <p>Address: {restaurant.address}</p>
                 <p>Food Available: {restaurant.food}</p>
               </div>
@@ -61,6 +104,8 @@ export default function BhookPage() {
           )}
         </div>
       </div>
+      {/* Button to stop speech synthesis */}
+      {isSpeaking && <button onClick={stopSpeaking}>Stop Narration</button>}
     </div>
   );
 }
