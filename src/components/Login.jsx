@@ -20,7 +20,9 @@ export default function Login() {
       // Assuming the server sends back the restaurant ID after login
       const loggedInRestaurantId = response.data.loggedInRestaurantId;
       // Set the restaurant ID in Recoil state
+      console.log("blah blah");
       setRestaurantId(loggedInRestaurantId);
+      console.log("blah blah after");
 
       console.log(response.data);
       localStorage.setItem('token', response.data.token);

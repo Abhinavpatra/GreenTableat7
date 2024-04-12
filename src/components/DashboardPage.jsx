@@ -1,62 +1,76 @@
-// AdminDashboard.js
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import { useRecoilValue } from 'recoil';
 import { restaurantIdState } from './atoms';
 
 export default function AdminDashboard() {
-  const [restaurants, setRestaurants] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
   const [editedRestaurant, setEditedRestaurant] = useState({
     name: '',
     address: '',
-    food: '' // Add more fields if you know what you're doing
+    food: ''
   });
-
-  // Access the almighty restaurant ID from the sacred atom using Recoil, bcz i learnt it 2-3 days ago
   const loggedInRestaurantId = useRecoilValue(restaurantIdState);
 
-  // Fetch  restaurant data for the goddamn logged-in admin using the restaurantId
   const fetchRestaurants = async () => {
+    setIsLoading(true);
     try {
-      if (!loggedInRestaurantId) {
-        console.error('Fucking hell! Restaurant ID is not defined.');
-        return;
+      const response = await fetch(`/api/restaurants/${loggedInRestaurantId}`);
+      if (response.ok) {
+        const data = await response.json();
+        if (data && Object.keys(data).length !== 0) {
+          setEditedRestaurant(data.restaurant);
+        }
+      } else {
+        console.error('Error fetching restaurant data:', response.statusText);
       }
-
-      // Fetch restaurant data for the elite admin using the restaurantId
-      const response = await axios.get(`http://localhost:3000/api/restaurants/${loggedInRestaurantId}`);
-      setRestaurants(response.data);
     } catch (err) {
-      console.error('Fuck! Error fetching restaurants:', err);
+      console.error('Error fetching restaurant data:', err);
     }
+    setIsLoading(false);
   };
 
   useEffect(() => {
-
-    fetchRestaurants();
-  }, [loggedInRestaurantId]); // Include loggedInRestaurantId in the dependency array because it's essential
+    if (loggedInRestaurantId) {
+      fetchRestaurants();
+    }
+  }, [loggedInRestaurantId]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setEditedRestaurant({
-      ...editedRestaurant,
+    setEditedRestaurant(prevState => ({
+      ...prevState,
       [name]: value
-    });
+    }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!loggedInRestaurantId) {
-      console.error('What the fuck! Restaurant ID is not defined.');
+    if (isLoading) {
+      console.error('Still loading data, please wait...');
       return;
     }
-
+    console.log('Submitting form with loggedInRestaurantId:', loggedInRestaurantId);
     try {
-      await axios.put(`/api/restaurants/${loggedInRestaurantId}`, editedRestaurant);
-      // After successful update, fetch updated restaurant data because why the hell not?
+      if (!loggedInRestaurantId) {
+        console.error('Error updating restaurant data2: Restaurant ID is null or undefined');//this line is being executed
+        return;
+      }
+  
+      const response = await fetch(`/api/restaurants/${loggedInRestaurantId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(editedRestaurant)
+      });
+  
+      if (!response.ok) {
+        throw new Error(`Error updating restaurant data: ${response.statusText}`);
+      }
+  
       fetchRestaurants();
     } catch (err) {
-      console.error('Shit! Error updating restaurant data:', err);
+      console.error('Error updating restaurant data:', err);
     }
   };
 
@@ -68,17 +82,16 @@ export default function AdminDashboard() {
         <form onSubmit={handleSubmit}>
           <label>
             Name:
-            <input type="text" name="name" value={editedRestaurant.name} onChange={handleInputChange} />
+            <input type="text" name="name" value={editedRestaurant.name || ''} onChange={handleInputChange} />
           </label>
           <label>
             Address:
-            <input type="text" name="address" value={editedRestaurant.address} onChange={handleInputChange} />
+            <input type="text" name="address" value={editedRestaurant.address || ''} onChange={handleInputChange} />
           </label>
           <label>
             Food:
-            <input type="text" name="food" value={editedRestaurant.food} onChange={handleInputChange} />
+            <input type="text" name="food" value={editedRestaurant.food || ''} onChange={handleInputChange} />
           </label>
-          {/* Add more input fields for other restaurant data if you're a fucking perfectionist */}
           <button type="submit">Submit</button>
         </form>
       </div>

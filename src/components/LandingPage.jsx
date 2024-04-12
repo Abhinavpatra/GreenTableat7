@@ -1,6 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../styles/LandingPage.modules.css'; // Import CSS module without treating it as a module
+import '../styles/Sp'
 
 export default function LandingPage() {
   const navigate = useNavigate();
@@ -12,7 +13,9 @@ export default function LandingPage() {
   const handleUserButtonClick = () => {
     navigate('/BhookaPage');
   };
-
+  const handleChallengedClick=()=>{
+    navigate('/listenPage');
+  }
   return (
     <>
       <div className="context">
@@ -20,6 +23,7 @@ export default function LandingPage() {
         <div>
           <button onClick={handleRestaurantButtonClick}>Restaurant</button>
           <button onClick={handleUserButtonClick}>User</button>
+          <button onClick={handleChallengedClick}>FOR HEARING</button>
         </div>
       </div>
 

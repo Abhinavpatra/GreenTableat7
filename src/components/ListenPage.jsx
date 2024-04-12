@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-export default function BhookaPage() {
+export default function BhookPage() {
   const [restaurants, setRestaurants] = useState([]);
 
   useEffect(() => {
@@ -9,6 +9,7 @@ export default function BhookaPage() {
       try {
         const response = await axios.get('http://localhost:3000/api/restaurants');
         setRestaurants(response.data);
+        speakRestaurants(response.data);
       } catch (err) {
         console.error('Error fetching restaurants:', err);
       }
@@ -23,6 +24,16 @@ export default function BhookaPage() {
     { name: 'Demo Restaurant 2', address: '456 Elm St', food: 'Pasta, Salad' },
     { name: 'Demo Restaurant 3', address: '789 Oak St', food: 'Sushi, Ramen' }
   ];
+
+  // Function to speak the restaurant details
+  const speakRestaurants = (data) => {
+    const msg = new SpeechSynthesisUtterance();
+    msg.text = `Here are the available restaurants. `;
+    data.forEach((restaurant) => {
+      msg.text += `Restaurant: ${restaurant.name}. Address: ${restaurant.address}. Food Available: ${restaurant.food}. `;
+    });
+    window.speechSynthesis.speak(msg);
+  };
 
   return (
     <div>

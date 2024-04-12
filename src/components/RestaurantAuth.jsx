@@ -13,15 +13,18 @@ export default function RestaurantAuth() {
     navigate('/signup');
   };
 
+  const handleNgoPortal = () => {
+    navigate('/ngo');
+  };
+
   return (
     <div className="container">
         <div className="heading">Restaurant</div>
       <div className="button-container">
         <button onClick={handleLogin}>Login</button>
         <button onClick={handleSignup}>Signup</button>
+        <button onClick={handleNgoPortal}>NGO Portal</button> {/* New button for accessing the NGO portal */}
       </div>
-      
-    
     </div>
   );
 }
