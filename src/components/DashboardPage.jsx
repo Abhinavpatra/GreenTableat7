@@ -69,6 +69,7 @@ export default function AdminDashboard() {
       }
   
       fetchRestaurants();
+      alert('Data Saved Successfully')
     } catch (err) {
       console.error('Error updating restaurant data:', err);
     }
