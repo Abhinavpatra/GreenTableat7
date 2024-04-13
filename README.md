@@ -9,6 +9,7 @@ Greentable is a web application built using the MERN (MongoDB, Express.js, React
 - **Restaurant Dashboard**: Authenticated restaurants have access to a dashboard where they can manage their restaurant details and update their food inventory.
 - **User Dashboard**: Users can view a list of restaurants in their city along with their food offerings, addresses, opening hours, and vegetarian/non-vegetarian options.
 - **CRUD Operations**: The application supports Create, Read, Update, and Delete operations for restaurant data and food items.
+- Refer to the PPT for the rest.
 
 ## Installation
 
